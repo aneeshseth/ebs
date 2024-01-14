@@ -4,7 +4,7 @@ services:
   myapp2:
     build:
       context: .
-      dockerfile: aneeshseth/current-api
+      dockerfile: aneeshseth/new-api
     ports:
       - "3004:3004"
     volumes:
