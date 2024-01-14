@@ -1,0 +1,41 @@
+name: Deploy backend-api
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+      - name: build image
+        run: cd api && docker build . -t aneeshseth/this-api:${{ github.sha }}
+
+      - name: push image
+        run: docker push aneeshseth/this-api:${{ github.sha }}
+
+      - name: creating a zip file
+        run: "mkdir deploy && cp api/docker-compose.yml deploy && cd deploy && zip -r deployx.zip *"
+
+      - name: checking my file structure
+        run: "ls && cd deploy && ls"
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: ne
+          environment_name: Ne-env
+          version_label: ${{ github.sha }}
+          region: eu-west-3
+          deployment_package: ./deploy/deployx.zip
