@@ -17,10 +17,8 @@ jobs:
         run: |
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
-      - name: Stop and remove existing container
-        run: |
-          docker stop 97faad7760bc || true
-          docker rm 97faad7760bc || true
+      - name: check containers running
+        run: "docker ps -a"
 
       - name: build image
         run: cd api && docker build . -t aneeshseth/api-mine:${{ github.sha }}
