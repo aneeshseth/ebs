@@ -18,10 +18,10 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
       - name: build image
-        run: cd api && docker build . -t aneeshseth/my-api:${{ github.sha }}
+        run: cd api && docker build . -t aneeshseth/api-mine:${{ github.sha }}
 
       - name: push image
-        run: docker push aneeshseth/my-api:${{ github.sha }}
+        run: docker push aneeshseth/api-mine:${{ github.sha }}
 
       - name: creating a zip file
         run: "mkdir deploy && cp api/docker-compose.yml deploy && cd deploy && zip -r deployx.zip *"
@@ -34,8 +34,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: serverapp
-          environment_name: Serverapp-env
+          application_name: sethaneesh
+          environment_name: Sethaneesh-env
           version_label: ${{ github.sha }}
           region: eu-west-3
           deployment_package: ./deploy/deployx.zip

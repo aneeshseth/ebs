@@ -4,7 +4,7 @@ services:
   myapp2:
     build:
       context: .
-      dockerfile: aneeshseth/my-api
+      dockerfile: aneeshseth/api-mine:${{ github.sha }}
     ports:
       - "3004:3004"
     volumes:
